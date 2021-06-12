@@ -1,0 +1,106 @@
+<div class="container">
+  <div class="card mt-5">
+    <div class="card-header">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-4">
+            <h4 class="text-center text-light">Departments</h4>
+            <div style="width: 100%;">
+              <canvas baseChart width="200" [data]="doughnutChartData" [labels]="doughnutChartLabels"
+                [chartType]="doughnutChartType">
+              </canvas>
+            </div>
+          </div>
+          <div class="col-md-6 offset-2">
+            <h4 class="text-light">Employees</h4>
+            <div class="row edata">
+              <div *ngFor="let l of doughnutChartLabels;let i=index" class="col-md-3">
+                <h1>{{doughnutChartData[i]}}</h1>
+                <p>{{l}}s</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="col-md-12">
+        <div class="row mb-3">
+          <div class="col-md-2">
+            <h4 class="font-weight-bold">List of Employees</h4>
+          </div>
+          <div class="col-md-5">
+            <div class="d-flex justify-content-around">
+              <select class="form-control shadow-none" (change)="onFilter()" [(ngModel)]="sel_loc">
+                <option value="" disabled selected>Locations</option>
+                <option *ngFor="let l of locations" value="{{l}}">{{l}}</option>
+              </select>
+              <select (change)="onFilter()" class="form-control shadow-none ml-3 mr-3" [(ngModel)]="sel_dept">
+                <option value="" disabled selected>Department</option>
+                <option *ngFor="let d of departments" value="{{d}}">{{d}}</option>
+              </select>
+              <select (change)="onFilter()" [(ngModel)]="sel_age" class="form-control shadow-none">
+                <option value="0" disabled selected>Age</option>
+                <option *ngFor="let i of age_arr(100); let ind=index" value="{{ind+1}}">{{ind+1}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <input type="text" class="form-control shadow-none" [(ngModel)]="search_str">
+              <div class="input-group-append" style="cursor: pointer;" (click)="onSearch()">
+                <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 text-right">
+            <button class="btn btn-warning" (click)="onCLearFilters()">Clear Filters</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <p-table [columns]="cols" [value]="employees">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                <span *ngIf="col.header==='S.No'">{{i+1+(current_page*rec_per_page)}}</span>
+                <span *ngIf="col.header!=='S.No'||col.header!=='Actions'">{{rowData[col.field]}}</span>
+                <span *ngIf="col.header==='Actions'">
+                  <button class="btn btn-info" type="button" (click)="onEdit(rowData._id)">Edit</button>
+                  <span class="ml-1 mr-1"></span>
+                  <button class="btn btn-danger" type="button" (click)="showConfirm(rowData._id)">Delete</button>
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-paginator [rows]="rec_per_page" [totalRecords]="total_rec" (onPageChange)="paginate($event)"
+          [rowsPerPageOptions]="[10,25,50]"></p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<p-toast position="top-center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="p-flex p-flex-column" style="flex: 1">
+      <div class="p-text-center">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{message.summary}}</h4>
+        <p>{{message.detail}}</p>
+      </div>
+      <div class="text-center">
+        <button type="button" (click)="onConfirm()" class="btn btn-success mr-3">Yes</button>
+        <button type="button" (click)="onReject()" class="btn btn-secondary">No</button>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>

@@ -1,0 +1,23 @@
+.card{
+    width: 40%;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 599px){
+    .card{
+        width: 100%;
+    }
+}
+@media only screen and (min-width: 600px) and (max-width: 768px){
+    .card{
+        width: 60%;
+    }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}

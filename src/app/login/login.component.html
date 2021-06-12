@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="aligndiv">
+        <div class="card">
+            <div class="card-header">
+                <div class="logo text-center">
+                    <img src="../../assets//onpassive-logo.png" alt="Logo">
+                </div>
+            </div>
+            <div class="card-title mb-0">
+                <h4 class="text-info mt-3 mb-1 pl-3">{{form_heading}}</h4>
+            </div>
+            <div *ngIf="activeForm==1 || activeForm==2" class="card-body pt-0 mt-0">
+                <p class="mb-0 text-secondary"><small class="font-weight-bold">User name must be an Email Id</small></p>
+                <p class=" text-secondary"><small class="font-weight-bold">Password should be Alphanumaric and min
+                        length should be 12</small></p>
+                <p class="text-danger text-center mb-0"><small>{{emsg}}</small></p>
+                <form [formGroup]="login_form" (ngSubmit)="onLogSubmit()">
+                    <div class="mb-4">
+                        <input type="text" class="form-control shadow-none" placeholder="User Name"
+                            formControlName="username" [ngClass]="{'border-danger':l.username.touched&&l.username.errors}" autocomplete="off">
+                    </div>
+                    <div class="mb-4">
+                        <input type="password" class="form-control shadow-none" placeholder="Password"
+                            formControlName="password" autocomplete="off" [ngClass]="{'border-danger':l.password.touched&&l.password.errors}">
+                    </div>
+                    <div class="text-center">
+                        <button class="btn"
+                            [ngClass]="{'btn-primary': activeForm == 1, ' btn-success' : activeForm == 2 }"
+                            type="submit" [disabled]="isSubmit||!login_form.valid" >{{activeForm==1?"Login":"Register"}}</button>
+                    </div>
+                </form>
+                <div *ngIf="activeForm==1" class="d-flex justify-content-between">
+                    <span><a (click)="onactiveFormChange(3)" class="btn text-info"><small>Forgot
+                                Password?</small></a></span>
+                    <span><a (click)="onactiveFormChange(2)" class="btn text-info"><small>New User?
+                                Register</small></a></span>
+                </div>
+                <div *ngIf="activeForm==2" class="d-flex justify-content-end">
+                    <span><a (click)="onactiveFormChange(1)" class="btn text-info"><small>Goto Login
+                                Page</small></a></span>
+                </div>
+            </div>
+
+            <div *ngIf="activeForm==3" class="card-body pt-0 mt-0">
+                <p class="text-danger text-center mb-0"><small>{{emsg}}</small></p>
+                <p *ngIf="smsg" class="text-success text-center">Password Reset Link sent to Email successfully</p>
+                <form [formGroup]="forgotpw_form" (ngSubmit)="onfpwSubmit()">
+                    <div class="mb-4">
+                        <input type="text" class="form-control shadow-none" placeholder="User Name"
+                            formControlName="username" autocomplete="off">
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button (click)="onactiveFormChange(1)" type="button"
+                            class="btn btn-secondary mr-3">Cancel</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="isSubmit||!this.forgotpw_form.valid">Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <div *ngIf="activeForm==4" class="card-body pt-0 mt-0">
+                <p class="text-secondary"><small class="font-weight-bold">Password should be Alphanumaric and min
+                        length should be 12</small></p>
+                <p class="text-danger text-center mb-0"><small>{{emsg}}</small></p>
+                <p *ngIf="smsg" class="text-success text-center">Password Changed successfully! Please Login</p>
+                <form [formGroup]="resetpw_form" (ngSubmit)="onresetpwSubmit()">
+                    <div class="mb-4">
+                        <input type="password" class="form-control shadow-none" placeholder="Enter New Password"
+                            formControlName="password" autocomplete="off" [ngClass]="{'border-danger':r.password.touched&&r.password.errors}">
+                        </div>
+                    <div class="mb-4">
+                        <input type="password" class="form-control shadow-none" placeholder="Confirm Password"
+                            formControlName="confirm_pw" autocomplete="off" [ngClass]="{'border-danger':r.confirm_pw.touched&&r.confirm_pw.errors}">
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="reset" class="btn btn-danger mr-3">Cancel</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="isSubmit||!this.resetpw_form.valid">Save</button>
+                    </div>
+                </form>
+                <div *ngIf="smsg" class="d-flex">
+                    <span><a [routerLink]="['']" class="btn text-info"><small>Goto Login
+                                Page</small></a></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
